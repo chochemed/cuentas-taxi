@@ -1,4 +1,4 @@
-const CACHE='cuentas-taxi-v8';
+const CACHE='cuentas-taxi-v9';
 const ARCHIVOS=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png'];
 /* Al instalar: se descargan los archivos saltándose la caché del navegador */
 self.addEventListener('install',e=>{
