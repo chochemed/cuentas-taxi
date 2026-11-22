@@ -11,7 +11,6 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Cuentas Taxi">
 <script>if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
-
 <title>Cuentas Taxi</title>
 <style>
 :root{
@@ -428,7 +427,7 @@ function current(){return db.days.find(d=>d.id===state.day)}
 function totals(d){let t={Efectivo:0,Tarjeta:0,Amex:0,Abonado:0,'Pago app':0,Bizum:0};(d?.charges||[]).forEach(c=>t[c.method]=(t[c.method]||0)+Number(c.amount||0));return t}
 function sumCharges(d){return (d?.charges||[]).reduce((a,c)=>a+Number(c.amount||0),0)}
 function sumExpenses(d){return (d?.expenses||[]).reduce((a,c)=>a+Number(c.amount||0),0)}
-function render(){/*DEBUG*/try{state.subVista=null;document.getElementById('today').textContent=new Intl.DateTimeFormat('es-ES',{dateStyle:'full'}).format(now());const a=activeDay(),box=document.getElementById('dayTotal');if(a){const inc=sumCharges(a),exp=sumExpenses(a);box.innerHTML=`<div class="dayTotal"><div class="label">Facturado hoy</div><div class="amount" style="cursor:pointer" onclick="abrirCobrosHoy()" title="Ver servicios del día">${money(inc)}</div><div class="meta">${(a.charges||[]).length} servicios · Gastos ${money(exp)} · <span class="net">Neto ${money(inc-exp)}</span></div></div>`}else box.innerHTML='';const f={home,menu,start,cobros,pay,card,amex,note,gastos,gastosConcept,cierre,historicos,buscar,alertas,dayDetail,reportView,comparar,gastosSelector,gastoOtros,gastoGasolina,gastoMantenimiento,gastoAdmin,perfil,perfilResumen,abonados,fondoVales,emisora,gastoElectrico,gastoElectricoKW,hacerFactura,verFacturas,facturaImporte,facturaServicio,facturaCliente,facturaResumen,facturaVer,pagoApp,manualFecha,manualKm,manualModo,manualCobro,manualCobroEmisora,manualCobroMetodo,manualCobroTerminal,manualCobroAmex,manualCobroNota,manualTotales,manualGastos,manualGastoSelector,manualGastoGasolina,manualGastoMantenimiento,manualGastoAdmin,elegirTipoCombustible,empleado,empleadoFecha,empleadoInforme,empleadoHistorial,historialElectrico,estadisticas,estadisticasFecha,estadisticasInforme,registrarGasto,registrarGastoCombustible,registrarGastoMantenimiento,reparacion,consultarMantenimientos,libroMantenimiento,bloqueConsultas,bloqueHerramientas,bloqueUtilidades,manual,registrarGastoAdmin,historialRegistrarGasto,gastosMes,cobrosMes,repostajes,copiaSeguridad}[state.screen]||home;f();mejorarInputs();}catch(e){alert('ERROR JS: '+e.message+' | '+e.stack);console.error(e);const s=document.getElementById('screen');if(s&&!s.innerHTML.trim())s.innerHTML='<div class="card center hero"><div class="big">🚕 Cuentas Taxi</div><button class="btn primary" onclick="state.screen=\'start\';render()">▶️ INICIAR DÍA</button><button class="btn" onclick="state.screen=\'historicos\';render()">📚 HISTÓRICOS</button><p class="muted">Listo para empezar.</p></div>'}}
+function render(){/*DEBUG*/try{state.subVista=null;document.getElementById('today').textContent=new Intl.DateTimeFormat('es-ES',{dateStyle:'full'}).format(now());const a=activeDay(),box=document.getElementById('dayTotal');if(a){const inc=sumCharges(a),exp=sumExpenses(a);box.innerHTML=`<div class="dayTotal"><div class="label">Facturado hoy</div><div class="amount" style="cursor:pointer" onclick="abrirCobrosHoy()" title="Ver servicios del día">${money(inc)}</div><div class="meta">${(a.charges||[]).length} servicios · Gastos ${money(exp)} · <span class="net">Neto ${money(inc-exp)}</span></div></div>`}else box.innerHTML='';const f={home,menu,start,cobros,pay,card,amex,note,gastos,gastosConcept,cierre,historicos,buscar,alertas,dayDetail,reportView,comparar,gastosSelector,gastoOtros,gastoGasolina,gastoMantenimiento,gastoAdmin,perfil,perfilResumen,abonados,fondoVales,emisora,gastoElectrico,gastoElectricoKW,hacerFactura,verFacturas,facturaImporte,facturaServicio,facturaCliente,facturaResumen,facturaVer,pagoApp,manualFecha,manualKm,manualModo,manualCobro,manualCobroEmisora,manualCobroMetodo,manualCobroTerminal,manualCobroAmex,manualCobroNota,manualTotales,manualGastos,manualGastoSelector,manualGastoGasolina,manualGastoMantenimiento,manualGastoAdmin,elegirTipoCombustible,empleado,empleadoFecha,empleadoInforme,empleadoHistorial,historialElectrico,estadisticas,estadisticasFecha,estadisticasInforme,registrarGasto,registrarGastoCombustible,registrarGastoMantenimiento,reparacion,consultarMantenimientos,libroMantenimiento,bloqueConsultas,bloqueHerramientas,bloqueUtilidades,manual,registrarGastoAdmin,historialRegistrarGasto,gastosMes,cobrosMes,repostajes,copiaSeguridad,facturaClienteConfirmar,facturaClienteDatos,propinas,propinasAcum,propinasMenu}[state.screen]||home;f();mejorarInputs();}catch(e){alert('ERROR JS: '+e.message+' | '+e.stack);console.error(e);const s=document.getElementById('screen');if(s&&!s.innerHTML.trim())s.innerHTML='<div class="card center hero"><div class="big">🚕 Cuentas Taxi</div><button class="btn primary" onclick="state.screen=\'start\';render()">▶️ INICIAR DÍA</button><button class="btn" onclick="state.screen=\'historicos\';render()">📚 HISTÓRICOS</button><p class="muted">Listo para empezar.</p></div>'}}
 function home(){const a=activeDay();document.getElementById('screen').innerHTML=`<div class="card center"><div class="big">📅 ${esc(new Intl.DateTimeFormat('es-ES',{dateStyle:'long'}).format(now()))}</div>${a?`<div class="notice">Hay un día abierto (${esc(a.date)}). Puedes continuar.</div><button class="btn primary" onclick="state.day=${a.id};state.screen='menu';render()">▶️ CONTINUAR DÍA</button>`:`<button class="btn primary" onclick="state.screen='start';render()">▶️ INICIAR DÍA</button>`}<button class="btn" onclick="state.screen='historicos';render()">📚 HISTÓRICOS</button>
 <button class="btn blue" onclick="state.manual=null;state.screen='manualFecha';render()">📅 INTRODUCIR DÍA MANUAL</button>
 <button class="btn" onclick="state.screen='registrarGasto';render()">💸 REGISTRAR GASTO</button>
@@ -450,11 +449,13 @@ function menu(){
         <div class="stat"><b>${d.charges.length}</b><span>SERVICIOS</span></div>
         <div class="stat"><b>${money(exp)}</b><span>GASTOS</span></div>
         <div class="stat"><b>${money(inc-exp)}</b><span>NETO</span></div>
+        <div class="stat" style="grid-column:1/-1"><b>${money(sumPropinas(d))}</b><span>💝 PROPINAS (no suman al neto)</span></div>
       </div>
     </div>
     <div class="grid">
       <button class="btn" onclick="state.screen='cobros';render()">💶 COBROS</button>
       <button class="btn" onclick="state.screen='gastosSelector';render()">💸 GASTOS</button>
+      <button class="btn" onclick="state.screen='propinasMenu';render()">💝 PROPINAS</button>
       <button class="btn danger" onclick="state.screen='cierre';render()">🔒 CIERRE</button>
     </div>
     <button class="btn blue" onclick="state.screen='bloqueConsultas';render()">📊 CONSULTAS</button>
@@ -636,7 +637,10 @@ function makeReport(d){
     '<h3>Ingresos por pago</h3>' +
     '<table class="reportTable"><tr><th>Pago</th><th>Total</th></tr>' +
     (filasIngresos || '<tr><td colspan="2">Sin ingresos</td></tr>') +
-    '<tr><th>Total facturación</th><th>'+money(inc)+'</th></tr></table>' +
+    '<tr><th>Total facturación</th><th>'+money(inc)+'</th></tr>' +
+    '<tr><td>Servicios realizados</td><td><b>'+(d.charges||[]).length+'</b></td></tr>' +
+    (statsEmisora(d).num>0?'<tr><td>De ellos, de emisora</td><td><b>'+statsEmisora(d).num+'</b></td></tr>':'') +
+    '</table>' +
     bloqueDatofonos +
     bloqueCombustible +
     bloqueEmisora +
@@ -755,6 +759,7 @@ function monthKey(date){const d=(date instanceof Date)?date:new Date(date);retur
 function monthStats(ym){const ds=db.days.filter(d=>d.date&&d.date.startsWith(ym)),t={Efectivo:0,Tarjeta:0,Amex:0,Abonado:0,'Pago app':0,Bizum:0};let inc=0,exp=0,services=0,km=0,minutes=0;ds.forEach(d=>{inc+=sumCharges(d);exp+=sumExpenses(d);services+=(d.charges||[]).length;Object.entries(totals(d)).forEach(([k,v])=>t[k]=(t[k]||0)+v);if(d.endKm!=null)km+=Number(d.endKm)-Number(d.startKm);if(d.close)minutes+=minutesBetween(d.start,d.close)});(db.gastosSueltos||[]).forEach(g=>{if(g.fecha&&g.fecha.startsWith(ym))exp+=Number(g.amount||0)});const gf=gastosFijosMes(ym);exp+=gf.total;const el=electricidadMes(ym);exp+=el.total;return{days:ds.length,inc,exp,net:inc-exp,services,km,minutes,t,gastosFijos:gf,elec:el}}
 function historicos(){const ym=state.mesHist||monthKey(new Date()),m=monthStats(ym),days=[...db.days].filter(d=>d.date&&d.date.startsWith(ym)).sort((a,b)=>b.date.localeCompare(a.date));const anioSel=Number(ym.slice(0,4)),mesSel=Number(ym.slice(5,7)),cmes=consumoDelPeriodo(new Date(anioSel,mesSel-1,1).getTime(),new Date(anioSel,mesSel,0,23,59,59).getTime());document.getElementById('screen').innerHTML=`<div class="card">
       <h2>📅 SELECCIONAR MES</h2>
+      <button class="btn blue" onclick="state.propOrigen='historicos';state.screen='propinasAcum';render()">💝 PROPINAS ACUMULADAS</button>
       <select id="selMesHist" class="input" onchange="state.mesHist=this.value;render()">
         ${(()=>{
           const meses = [...new Set((db.days||[]).map(d=>d.date?d.date.slice(0,7):null).filter(x=>x))];
@@ -838,7 +843,7 @@ return '<div class="statgrid">'+
 <div class="card"><h2>🧾 FACTURAS</h2><button class="btn primary" onclick="state.screen='verFacturas';render()">📚 VER TODAS LAS FACTURAS</button></div>
 
 <div class="card"><h2>🗂️ PDFs INTERNOS</h2><p class="muted">Los resúmenes diarios se conservan hasta 2 años y los mensuales hasta 5 años. Los PDF que guardes fuera de la app no se eliminan.</p></div><button class="btn small" onclick="state.screen=activeDay()?'menu':'home';render()">VOLVER</button>`}
-function dayDetail(){const d=current();if(!d){state.screen='historicos';return render()}const inc=sumCharges(d),exp=sumExpenses(d);document.getElementById('screen').innerHTML=`<div class="card"><h2>📅 ${esc(d.date)}</h2><div class="statgrid"><div class="stat tap" onclick="verCobrosDia(${d.id})"><b>${money(inc)}</b><span>COBROS</span></div><div class="stat tap" onclick="verGastosDia(${d.id})"><b>${money(exp)}</b><span>GASTOS</span></div><div class="stat"><b>${money(inc-exp)}</b><span>NETO</span></div><div class="stat"><b>${d.endKm!=null?d.endKm-d.startKm:'—'}</b><span>KM</span></div></div>${d.closed?`<button class="btn primary" onclick="state.reportId=${d.id};state.screen='reportView';render()">📄 VER / GUARDAR PDF</button>`:''}
+function dayDetail(){const d=current();if(!d){state.screen='historicos';return render()}const inc=sumCharges(d),exp=sumExpenses(d);document.getElementById('screen').innerHTML=`<div class="card"><h2>📅 ${esc(d.date)}</h2><div class="statgrid"><div class="stat tap" onclick="verCobrosDia(${d.id})"><b>${money(inc)}</b><span>COBROS</span></div><div class="stat tap" onclick="verGastosDia(${d.id})"><b>${money(exp)}</b><span>GASTOS</span></div>${(d.propinas&&d.propinas.length)?`<div class="stat"><b>${money(sumPropinas(d))}</b><span>PROPINAS</span></div>`:''}<div class="stat"><b>${money(inc-exp)}</b><span>NETO</span></div><div class="stat"><b>${d.endKm!=null?d.endKm-d.startKm:'—'}</b><span>KM</span></div></div>${d.closed?`<button class="btn primary" onclick="state.reportId=${d.id};state.screen='reportView';render()">📄 VER / GUARDAR PDF</button>`:''}
 <button class="btn blue" onclick="verCobrosDia(${d.id})">👁 VER COBROS DEL DÍA</button>
 <button class="btn small" onclick="editarKmDia(${d.id})">✏️ EDITAR KM</button>
 <button class="btn blue" onclick="verGastosDia(${d.id})">👁 VER GASTOS DEL DÍA</button>
@@ -2507,12 +2512,83 @@ function facSetServicio(){
 }
 
 // --- PANTALLA: datos del cliente ---
+/* ===== FACTURA · paso 3: primero el DNI/NIF; si ya hay factura a ese cliente, se recuperan sus datos ===== */
+function normNif(s){ return String(s==null?'':s).toUpperCase().replace(/[^A-Z0-9]/g,''); }
+function buscarClientePorNif(nif){
+  const k=normNif(nif);
+  if(!k) return null;
+  if(db.clientes&&db.clientes[k]) return db.clientes[k];
+  const fs=(db.facturas||[]).slice().sort((a,b)=>b.id-a.id);
+  for(let i=0;i<fs.length;i++){ const c=fs[i].cliente; if(c&&normNif(c.nif)===k) return c; }
+  return null;
+}
 function facturaCliente(){
   const c = state.factura.cliente || {};
   document.getElementById('screen').innerHTML = `
     <div class="card">
       <h2>🧾 NUEVA FACTURA</h2>
-      <p class="muted">Paso 3 de 4 · Datos del cliente</p>
+      <p class="muted">Paso 3 de 4 · DNI del cliente</p>
+      <label>DNI / NIF / CIF del cliente</label>
+      <input id="facClNifBusca" class="input" autocapitalize="characters" value="${esc(c.nif||'')}" placeholder="Ej.: 12345678Z">
+      <p class="muted" style="font-size:12px">Si ya le has hecho una factura, se recuperan sus datos.</p>
+      <button class="btn primary" onclick="facBuscarCliente()">CONTINUAR</button>
+      <button class="btn small" onclick="state.screen='facturaServicio';render()">VOLVER</button>
+    </div>`;
+}
+function facBuscarCliente(){
+  const nif = (document.getElementById('facClNifBusca').value||'').trim().toUpperCase();
+  if(!normNif(nif)) return alert('Escribe el DNI / NIF del cliente');
+  const prev = buscarClientePorNif(nif);
+  if(prev){
+    state.factura.clienteEncontrado = prev;
+    state.factura.cliente = { nif: nif };
+    state.screen = 'facturaClienteConfirmar';
+  }else{
+    state.factura.clienteEncontrado = null;
+    state.factura.cliente = { nif: nif };
+    state.screen = 'facturaClienteDatos';
+  }
+  render();
+}
+function facturaClienteConfirmar(){
+  const c = state.factura.clienteEncontrado;
+  if(!c){ state.screen='facturaCliente'; return render(); }
+  document.getElementById('screen').innerHTML = `
+    <div class="card">
+      <h2>🧾 NUEVA FACTURA</h2>
+      <p class="muted">Paso 3 de 4 · Cliente encontrado</p>
+      <div class="notice">Ya le hiciste una factura a este cliente. ¿Son estos sus datos?</div>
+      <div class="sectionTitle">Datos guardados</div>
+      <div><b>${esc(c.nombre||'—')}</b></div>
+      <div>NIF / CIF: ${esc(c.nif||'—')}</div>
+      <div>${esc(c.direccion||'—')}</div>
+      <div>${esc([c.cp,c.localidad].filter(x=>x).join(' '))}${c.provincia?' ('+esc(c.provincia)+')':''}</div>
+      <button class="btn primary" onclick="facClienteSi()">✅ SÍ, SON ESTOS</button>
+      <button class="btn danger" onclick="facClienteNo()">❌ NO, ESCRIBIR LOS DATOS DE NUEVO</button>
+      <button class="btn small" onclick="state.screen='facturaCliente';render()">VOLVER</button>
+    </div>`;
+}
+function facClienteSi(){
+  const c = state.factura.clienteEncontrado;
+  if(!c) return;
+  state.factura.cliente = { nif:c.nif||'', nombre:c.nombre||'', direccion:c.direccion||'', cp:c.cp||'', localidad:c.localidad||'', provincia:c.provincia||'' };
+  state.screen = 'facturaResumen';
+  render();
+}
+function facClienteNo(){
+  const nif = (state.factura.cliente && state.factura.cliente.nif) || '';
+  state.factura.cliente = { nif: nif };
+  state.factura.clienteEncontrado = null;
+  state.screen = 'facturaClienteDatos';
+  render();
+}
+
+function facturaClienteDatos(){
+  const c = state.factura.cliente || {};
+  document.getElementById('screen').innerHTML = `
+    <div class="card">
+      <h2>🧾 NUEVA FACTURA</h2>
+      <p class="muted">Paso 3 de 4 · Datos del cliente (completa todos)</p>
       <label>NIF / CIF</label>
       <input id="facClNif" class="input" value="${esc(c.nif||'')}">
       <label>Empresa / Nombre</label>
@@ -2526,13 +2602,13 @@ function facturaCliente(){
       <label>Provincia</label>
       <input id="facClProvincia" class="input" value="${esc(c.provincia||'')}">
       <button class="btn primary" onclick="facSetCliente()">CONTINUAR</button>
-      <button class="btn small" onclick="state.screen='facturaServicio';render()">VOLVER</button>
+      <button class="btn small" onclick="state.screen='facturaCliente';render()">VOLVER</button>
     </div>`;
 }
 
 function facSetCliente(){
   const c = {
-    nif: document.getElementById('facClNif').value.trim(),
+    nif: document.getElementById('facClNif').value.trim().toUpperCase(),
     nombre: document.getElementById('facClNombre').value.trim(),
     direccion: document.getElementById('facClDir').value.trim(),
     cp: document.getElementById('facClCp').value.trim(),
@@ -2616,6 +2692,10 @@ function facCrear(){
   };
   if(!db.facturas) db.facturas = [];
   db.facturas.push(factura);
+  if(factura.cliente && normNif(factura.cliente.nif)){
+    if(!db.clientes) db.clientes = {};
+    db.clientes[normNif(factura.cliente.nif)] = Object.assign({}, factura.cliente, {ultima: factura.fecha});
+  }
   db.facturaUltima = num;
   save();
   state.facturaId = factura.id;
@@ -6457,6 +6537,125 @@ function aplicarCopia(texto){
   }catch(e){ console.warn('migración informes:',e); }
 })();
 
+/* ===== PROPINAS ===== */
+function sumPropinas(d){ return (d.propinas||[]).reduce((a,p)=>a+Number(p.amount||0),0); }
+function fmtImp(n){ return Number(n||0).toFixed(2).replace('.',','); }
+function propinas(){
+  const d = activeDay() || current();
+  if(!d){ state.screen='home'; return render(); }
+  if(!state.propina) state.propina = {amount:''};
+  const lista = (d.propinas||[]).slice().sort((a,b)=>new Date(b.time)-new Date(a.time));
+  document.getElementById('screen').innerHTML = `
+    <div class="card">
+      <h2>💝 PROPINAS</h2>
+      <div class="statgrid">
+        <div class="stat"><b>${money(sumPropinas(d))}</b><span>TOTAL DE HOY</span></div>
+        <div class="stat"><b>${(d.propinas||[]).length}</b><span>PROPINAS</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="big">${esc(state.propina.amount||'0,00')} €</div>
+      <div class="keypad">${['1','2','3','4','5','6','7','8','9',',','0','⌫'].map(x=>`<button class="key" onclick="key('propina','${x}')">${x}</button>`).join('')}</div>
+      <button class="btn primary" onclick="once(guardarPropina)">✅ GUARDAR PROPINA</button>
+    </div>
+    <div class="card">
+      <h2>📋 PROPINAS DE HOY</h2>
+      ${lista.length?'<div class="list">'+lista.map(p=>`<div class="item row"><div><b>${money(p.amount)}</b><br><span class="muted">${timeOf(p.time)}</span></div><button class="btn small danger" onclick="borrarPropina(${p.id})">🗑️</button></div>`).join('')+'</div>':'<p class="muted">Todavía no has anotado propinas hoy.</p>'}
+    </div>
+    <button class="btn small" onclick="state.screen='propinasMenu';render()">⬅️ VOLVER</button>`;
+}
+function guardarPropina(){
+  const d = activeDay() || current();
+  if(!d) return alert('No hay día en curso');
+  const n = parseMoney((state.propina && state.propina.amount) || '');
+  if(!(n > 0)) return alert('Introduce un importe válido.');
+  if(!d.propinas) d.propinas = [];
+  d.propinas.push({id:Date.now(), time:iso(now()), amount:Math.round(n*100)/100});
+  save();
+  state.propina = {amount:''};
+  render();
+}
+function borrarPropina(id){
+  const d = activeDay() || current();
+  if(!d) return;
+  if(!confirm('¿Borrar esta propina?')) return;
+  d.propinas = (d.propinas||[]).filter(p=>p.id!==id);
+  save();
+  render();
+}
+function propDesdeAtajo(tipo){
+  const hoy = new Date();
+  const f = dt => dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
+  if(tipo==='mes') state.propDesde = f(new Date(hoy.getFullYear(), hoy.getMonth(), 1));
+  else if(tipo==='7'){ const d7 = new Date(hoy); d7.setDate(d7.getDate()-6); state.propDesde = f(d7); }
+  else { const fs = (db.days||[]).map(d=>d.date).filter(x=>x).sort(); state.propDesde = fs.length ? fs[0] : f(hoy); }
+  render();
+}
+function propinasAcum(){
+  const hoy = localDate();
+  const desde = state.propDesde || '';
+  let cuerpo = '<p class="muted">Elige una fecha y verás las propinas anotadas desde ese día hasta hoy.</p>';
+  if(desde){
+    const ds = (db.days||[]).filter(d=>d.date&&d.date>=desde&&d.date<=hoy).sort((a,b)=>b.date.localeCompare(a.date));
+    const conP = ds.filter(d=>(d.propinas||[]).length);
+    const total = ds.reduce((a,d)=>a+sumPropinas(d),0);
+    const n = ds.reduce((a,d)=>a+(d.propinas||[]).length,0);
+    cuerpo = `
+      <div class="notice">Propinas desde <b>${esc(desde)}</b> hasta hoy</div>
+      <div class="total">${money(total)}</div>
+      <div class="statgrid" style="margin-top:10px">
+        <div class="stat"><b>${n}</b><span>PROPINAS</span></div>
+        <div class="stat"><b>${conP.length}</b><span>DÍAS CON PROPINA</span></div>
+        <div class="stat"><b>${ds.length}</b><span>DÍAS TRABAJADOS</span></div>
+        <div class="stat"><b>${ds.length?money(total/ds.length):money(0)}</b><span>MEDIA POR DÍA</span></div>
+      </div>
+      <h2 style="margin-top:14px">📅 POR DÍAS</h2>
+      ${conP.length?'<div class="list">'+conP.map(d=>`<div class="item row"><div><b>${esc(d.date)}</b> · ${money(sumPropinas(d))}<br><span class="muted">${(d.propinas||[]).map(p=>fmtImp(p.amount)).join(' · ')}</span></div><button class="btn small" onclick="state.day=${d.id};state.screen='dayDetail';render()">VER DÍA</button></div>`).join('')+'</div>':'<p class="muted">No hay propinas en ese periodo.</p>'}`;
+  }
+  document.getElementById('screen').innerHTML = `
+    <div class="card">
+      <h2>💝 PROPINAS ACUMULADAS</h2>
+      <label>Desde qué fecha</label>
+      <input type="date" class="input" max="${hoy}" value="${esc(desde)}" onchange="state.propDesde=this.value;render()">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
+        <button class="btn small" onclick="propDesdeAtajo('7')">ÚLTIMOS 7 DÍAS</button>
+        <button class="btn small" onclick="propDesdeAtajo('mes')">ESTE MES</button>
+        <button class="btn small" onclick="propDesdeAtajo('todo')">TODO</button>
+      </div>
+    </div>
+    <div class="card">${cuerpo}</div>
+    <button class="btn small" onclick="state.screen=state.propOrigen||'historicos';render()">⬅️ VOLVER</button>`;
+}
+
+/* ===== PROPINAS: menú «¿Introducir o consultar acumulado?» ===== */
+function propinasMenu(){
+  const d = activeDay() || current();
+  if(!d){ state.screen='home'; return render(); }
+  document.getElementById('screen').innerHTML = `
+    <div class="card">
+      <h2>💝 PROPINAS</h2>
+      <div class="statgrid">
+        <div class="stat"><b>${money(sumPropinas(d))}</b><span>PROPINAS DE HOY</span></div>
+        <div class="stat"><b>${(d.propinas||[]).length}</b><span>ANOTADAS</span></div>
+      </div>
+      <p class="big" style="margin:14px 0 6px">¿Qué quieres hacer?</p>
+      <button class="btn primary" onclick="state.screen='propinas';render()">✍️ INTRODUCIR PROPINA</button>
+      <button class="btn blue" onclick="state.propDesde='';state.propOrigen='propinasMenu';state.screen='propinasAcum';render()">📊 CONSULTAR ACUMULADO</button>
+      <button class="btn small" onclick="state.screen='menu';render()">⬅️ VOLVER</button>
+    </div>`;
+}
+
+/* ===== Rehacer una vez los informes guardados (nº de servicios) ===== */
+(function(){
+  try{
+    if(db.migServ1) return;
+    (db.dailyReports||[]).forEach(r=>{
+      const d=db.days.find(x=>x.id===r.dayId);
+      if(d&&d.closed&&d.close){ try{ r.html=makeReport(d); }catch(e){} }
+    });
+    db.migServ1=true; save();
+  }catch(e){ console.warn('migración servicios:',e); }
+})();
 </script>
 
 <audio id="avisoAudio" preload="auto" src="data:audio/mpeg;base64,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NdSBqdRiXn3hH92dVmv8c6qqqGVWQ2BDhhTmLp8miEzr/EoBIv/yoYDqP/gqvaTJirXA//NCxKUT6ZaRnpmGdGqS5fhHME40oCCEo6mTZ7EevoQ4h6OK6EBIfIFoE46OrlW7aYDCrzlXUjAmhxwY4mozezMV9cvz/y/1hmVExhSwqSb/krv/V///4dowBWrLLvsBmFN6qonWvOMD//NAxLETuaKZnlpGCggEcBAX9AJwoNFXHWY7ar9kj/4M/d/9eq71Xpo2orv0/vdVTEFNRVVVAwRarAnGaDFrUTxqQrUgqJqt9G6igIMLZ7VaXj6KHtLLF2itRGlvVOMs7+21N4UWZPL/80LEvRRhmlgUewY8Tz0XH2Nm1LPDJ1jQFXb2KdGk5BwKXVLfdTxT9/TUqibQtywfISgXHqiK+kEmwe5vkWQ1PITaYYQRsbtvuEPrupWsMdxxLkqQnB2rsNlItJUvp5CkcsypFSLKPML/80DExwyIkmWeGEREcu5mx0EZ7Fshoik9h3KqcC8IylbmHpOfVI41k4+hi2rYqt0rmz25vLRu2nLlwsOWeabMwUEwS5gmNDLgJUNCCglQmEoo7pGR3jWArnPkDkC2btCmJcl4isyeE//zQsTpEXh2JVR4TCxC1eqiJ1D+/nl+IrEcn+0hV9D/5NyfWY/vTXJI3n13BDz4TPtBy6oQslkGVqwGFY0eqEEPIRCoNvQBVv2TKZMNOQGiAfP2yaQ7fcqwRPYVaKILOScw8fLCm9y3IP/zQMT/Gqs+BAChhl1iRf3EWDEMOpe1K7c04KMS5SDS3IH1Bi5NOmy7zp1Sjz0kHbHen3pmopdziV+iqu69nUYgRN128381IYjOmsRRJ4B9kpSN95ecCAebxYDgJCsx3ydGWwTs+0PM//NCxO8XisYIAMhGCcXXB6GDZ+U84jaku38uprpkXUyt1yU9VbNL+5Fl3BP1T5mIPLL0ygVVg8+ICC09MHibmiGIOmXvLS+6G4QGpqWpGcBkvMxs3EqJpy8WZFZlUddFoZ0pu3urQxhb//NAxOwSmAoiNIBGAJ/9EyrP1U7/9l/y/a7vGX3q/KZW+fjzsGlbpB8L/WfemaoIguRC5hoEnA1MUkqqGkU1XLIoBGpRquqkxr6k2peYYxX9JghU3KFNk/5rRUULGVx0pIqSdzEC85X/80LE/BrbOgQAoYa9vcq7pv8iy/8WWL+/d///SZJ/YUL7nCzRpvHY/5Nh5LraK/YLGyWpXFa3MhBJhhI7CR8v/+c/hrrDWeoNBSoaz5Sa/9n///w1aNSb9o5N/L/5Q1pNl+qx1ak1/hr/80DE7BWQ/gwAwYYFwUAgybya/Y6hnVtv/+w+xxIZBQqU04qDBoX9yqtMQU1FNC4wVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsTwFvC97ArCRhFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMTwFXr9lABIRl1VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV"></audio>
